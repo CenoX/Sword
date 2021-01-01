@@ -19,6 +19,7 @@ import WebSockets
 extension Gateway {
   func heartbeat(at interval: Int) {
     guard self.isConnected else {
+      print("[Sword] Couldn't send heartbeat because gateway is not connected.")
       return
     }
     
@@ -34,8 +35,8 @@ extension Gateway {
     
     self.heartbeatQueue.asyncAfter(
       deadline: .now() + .milliseconds(interval)
-    ) { [unowned self] in
-      self.heartbeat(at: interval)
+    ) { [weak self] in
+      self?.heartbeat(at: interval)
     }
   }
 }
